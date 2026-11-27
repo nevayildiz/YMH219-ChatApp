@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ChatApp.Core;
 using ChatApp.Core.Client;
@@ -155,6 +156,44 @@ public partial class ClientWindow : Window
             MessageInput.Focus();
         }
     }
+
+    // ---------- Geçmiş ----------
+
+    private async void OnSaveHistoryClick(object? sender, RoutedEventArgs e)
+    {
+        HideError();
+        if (_messages.Count == 0)
+        {
+            ShowError("Kaydedilecek mesaj yok.");
+            return;
+        }
+
+        try
+        {
+            var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                Title = "Sohbet geçmişini kaydet",
+                SuggestedFileName = ChatHistory.SuggestFileName(),
+                DefaultExtension = "txt",
+                FileTypeChoices = new[]
+                {
+                    new FilePickerFileType("Metin dosyası") { Patterns = new[] { "*.txt" } }
+                }
+            });
+            if (file is null) return; // Kullanıcı vazgeçti.
+
+            await using (var stream = await file.OpenWriteAsync())
+                await ChatHistory.WriteAsync(stream, _messages.ToList(), _client.UserName);
+
+            AddMessage(ChatMessage.CreateInfo($"Geçmiş kaydedildi: {file.Name}"));
+        }
+        catch (Exception ex)
+        {
+            ShowError($"Geçmiş kaydedilemedi: {ex.Message}");
+        }
+    }
+
+    private void OnClearClick(object? sender, RoutedEventArgs e) => _messages.Clear();
 
     // ---------- Gelen paketler ----------
 
