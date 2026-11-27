@@ -13,8 +13,6 @@ public partial class LauncherWindow : Window
     private void OnOpenServerClick(object? sender, RoutedEventArgs e) =>
         new ServerWindow().Show();
 
-    private void OnOpenClientClick(object? sender, RoutedEventArgs e)
-    {
-        // İstemci penceresi sonraki adımda eklenecek.
-    }
+    private void OnOpenClientClick(object? sender, RoutedEventArgs e) =>
+        new ClientWindow().Show();
 }

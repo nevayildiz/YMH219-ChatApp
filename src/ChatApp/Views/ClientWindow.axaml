@@ -1,0 +1,110 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cm="using:ChatApp.Core.Models"
+        x:Class="ChatApp.Views.ClientWindow"
+        Title="Chat İstemcisi"
+        Width="820" Height="600" MinWidth="620" MinHeight="440"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Styles>
+        <Style Selector="ListBox#MessagesList ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="6,2" />
+        </Style>
+        <Style Selector="Border.bubble">
+            <Setter Property="Background" Value="#F1F3F5" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="10,6" />
+            <Setter Property="MaxWidth" Value="480" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style Selector="Border.bubble.outgoing">
+            <Setter Property="Background" Value="#D7EBFF" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <Style Selector="Border.bubble.private">
+            <Setter Property="Background" Value="#FFF1CC" />
+        </Style>
+        <Style Selector="Border.bubble.info">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="4,2" />
+        </Style>
+    </Window.Styles>
+
+    <DockPanel Margin="16">
+
+        <!-- Bağlantı bilgileri -->
+        <Border DockPanel.Dock="Top" Background="#F3F4F6" CornerRadius="8" Padding="12">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,*,Auto,Auto" RowDefinitions="Auto,Auto">
+                <TextBlock Grid.Column="0" Text="Sunucu:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <TextBox Grid.Column="1" Name="HostBox" Text="127.0.0.1" MinWidth="110" />
+                <TextBlock Grid.Column="2" Text="Port:" VerticalAlignment="Center" Margin="10,0,6,0" />
+                <TextBox Grid.Column="3" Name="PortBox" Text="5000" Width="72" />
+                <TextBlock Grid.Column="4" Text="Kullanıcı adı:" VerticalAlignment="Center" Margin="10,0,6,0" />
+                <TextBox Grid.Column="5" Name="UserBox" MinWidth="110" MaxLength="20" />
+                <Button Grid.Column="6" Name="ConnectButton" Content="Bağlan" Margin="10,0,0,0"
+                        Click="OnConnectClick" />
+                <Button Grid.Column="7" Name="DisconnectButton" Content="Bağlantıyı Kes" Margin="6,0,0,0"
+                        IsEnabled="False" Click="OnDisconnectClick" />
+
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="8" Orientation="Horizontal" Spacing="8" Margin="0,10,0,0">
+                    <Ellipse Name="StatusDot" Width="12" Height="12" Fill="Gray" VerticalAlignment="Center" />
+                    <TextBlock Name="StatusText" Text="Bağlı değil" FontWeight="SemiBold" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TextBlock DockPanel.Dock="Top" Name="ErrorText" Foreground="#C62828"
+                   TextWrapping="Wrap" Margin="0,8,0,0" IsVisible="False" />
+
+        <!-- Mesaj yazma alanı -->
+        <Grid DockPanel.Dock="Bottom" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" Margin="0,10,0,0">
+            <TextBlock Grid.ColumnSpan="2" Name="TargetText" Text="Alıcı: Herkes" FontSize="12"
+                       Foreground="#555" Margin="0,0,0,4" />
+            <TextBox Grid.Row="1" Grid.Column="0" Name="MessageInput" Watermark="Mesajınızı yazın ve Enter'a basın..."
+                     MaxLength="2000" IsEnabled="False" />
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="6" Margin="8,0,0,0">
+                <Button Name="SendButton" Content="Mesaj Gönder" IsEnabled="False" Click="OnSendClick" />
+            </StackPanel>
+        </Grid>
+
+        <Grid ColumnDefinitions="*,12,210" Margin="0,10,0,0">
+            <!-- Mesajlar -->
+            <Border Grid.Column="0" BorderBrush="#DDD" BorderThickness="1" CornerRadius="6">
+                <ListBox Name="MessagesList" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="cm:ChatMessage">
+                            <Border Classes="bubble"
+                                    Classes.outgoing="{Binding IsOutgoing}"
+                                    Classes.private="{Binding IsPrivate}"
+                                    Classes.info="{Binding IsInfo}">
+                                <StackPanel Spacing="2">
+                                    <StackPanel Orientation="Horizontal" Spacing="8" IsVisible="{Binding !IsInfo}">
+                                        <TextBlock Text="{Binding Header}" FontWeight="SemiBold" FontSize="12" />
+                                        <TextBlock Text="{Binding TimeText}" FontSize="11" Foreground="#888" />
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding Text}" TextWrapping="Wrap" IsVisible="{Binding !IsInfo}" />
+                                    <TextBlock Text="{Binding InfoLine}" FontSize="12" FontStyle="Italic"
+                                               Foreground="#777" TextWrapping="Wrap" IsVisible="{Binding IsInfo}" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+
+            <!-- Çevrimiçi kullanıcılar -->
+            <DockPanel Grid.Column="2">
+                <TextBlock DockPanel.Dock="Top" Name="UsersHeader" Text="Çevrimiçi (0)" FontWeight="SemiBold"
+                           Margin="0,0,0,6" />
+                <TextBlock DockPanel.Dock="Bottom" FontSize="11" Foreground="#777" TextWrapping="Wrap"
+                           Margin="0,6,0,0"
+                           Text="Özel mesaj için listeden bir kullanıcı seçin. Genel sohbete dönmek için &quot;Herkes&quot;i seçin." />
+                <Border BorderBrush="#DDD" BorderThickness="1" CornerRadius="6">
+                    <ListBox Name="UsersList" Background="Transparent" SelectionChanged="OnUserSelectionChanged" />
+                </Border>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</Window>
