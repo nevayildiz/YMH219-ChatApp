@@ -1,0 +1,26 @@
+# Derleme çıktıları
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+out/
+publish/
+
+# IDE klasörleri
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.DotSettings.user
+
+# NuGet
+*.nupkg
+packages/
+
+# İşletim sistemi
+.DS_Store
+Thumbs.db
+
+# Uygulamanın kaydettiği sohbet geçmişleri
+sohbet_*.txt

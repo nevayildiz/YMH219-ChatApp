@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ChatApp.Views.LauncherWindow"
+        Title="YMH219 Chat Uygulaması"
+        Width="460" Height="340"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen">
+    <Grid RowDefinitions="Auto,*,Auto" Margin="24">
+        <StackPanel Grid.Row="0" Spacing="4">
+            <TextBlock Text="İstemci–Sunucu Chat" FontSize="22" FontWeight="SemiBold" />
+            <TextBlock Text="TCP/IP (TcpListener / TcpClient) ile mesajlaşma"
+                       Foreground="#666" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Spacing="12" VerticalAlignment="Center">
+            <Button Name="OpenServerButton" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center" Padding="12"
+                    Content="Sunucu Penceresi Aç" Click="OnOpenServerClick" />
+            <Button Name="OpenClientButton" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center" Padding="12"
+                    Content="İstemci Penceresi Aç" Click="OnOpenClientClick" />
+            <TextBlock TextWrapping="Wrap" Foreground="#666" FontSize="12"
+                       Text="Aynı bilgisayarda test için önce sunucuyu başlatın, sonra birden fazla istemci penceresi açın. Başka bir bilgisayardan bağlanmak için sunucu penceresinde yazan yerel IP adresini kullanın." />
+        </StackPanel>
+
+        <TextBlock Grid.Row="2" HorizontalAlignment="Center" FontSize="11" Foreground="#999"
+                   Text="Neva Yıldız · 250541034 · YMH 219" />
+    </Grid>
+</Window>

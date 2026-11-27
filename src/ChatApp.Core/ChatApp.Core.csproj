@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Ağ iletişimi ve sohbet mantığı. Arayüzden bağımsızdır (Avalonia referansı yok). -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ChatApp.Core</RootNamespace>
+  </PropertyGroup>
+
+</Project>
