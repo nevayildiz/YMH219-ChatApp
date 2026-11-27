@@ -10,10 +10,8 @@ public partial class LauncherWindow : Window
         InitializeComponent();
     }
 
-    private void OnOpenServerClick(object? sender, RoutedEventArgs e)
-    {
-        // Sunucu penceresi sonraki adımda eklenecek.
-    }
+    private void OnOpenServerClick(object? sender, RoutedEventArgs e) =>
+        new ServerWindow().Show();
 
     private void OnOpenClientClick(object? sender, RoutedEventArgs e)
     {

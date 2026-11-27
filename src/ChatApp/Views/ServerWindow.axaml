@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:m="using:ChatApp.Models"
+        x:Class="ChatApp.Views.ServerWindow"
+        Title="Chat Sunucusu"
+        Width="860" Height="560" MinWidth="640" MinHeight="420"
+        WindowStartupLocation="CenterScreen">
+    <DockPanel Margin="16">
+
+        <!-- Üst bar: port, başlat/durdur, durum göstergesi -->
+        <Border DockPanel.Dock="Top" Background="#F3F4F6" CornerRadius="8" Padding="12">
+            <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto" RowDefinitions="Auto,Auto">
+                <TextBlock Grid.Column="0" Text="Port:" VerticalAlignment="Center" Margin="0,0,8,0" />
+                <TextBox Grid.Column="1" Name="PortBox" Text="5000" Width="90" />
+                <Button Grid.Column="2" Name="StartButton" Content="Sunucuyu Başlat"
+                        Margin="12,0,0,0" Click="OnStartClick" />
+                <Button Grid.Column="3" Name="StopButton" Content="Durdur" IsEnabled="False"
+                        Margin="8,0,0,0" Click="OnStopClick" />
+
+                <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <Ellipse Name="StatusDot" Width="12" Height="12" Fill="Gray" />
+                    <TextBlock Name="StatusText" Text="Durduruldu" FontWeight="SemiBold" />
+                </StackPanel>
+
+                <TextBlock Grid.Row="1" Grid.ColumnSpan="6" Name="IpText" Margin="0,10,0,0"
+                           Foreground="#555" FontSize="12" TextWrapping="Wrap" />
+            </Grid>
+        </Border>
+
+        <TextBlock DockPanel.Dock="Bottom" Name="ErrorText" Foreground="#C62828"
+                   TextWrapping="Wrap" Margin="0,8,0,0" IsVisible="False" />
+
+        <Grid ColumnDefinitions="*,12,*" Margin="0,12,0,0">
+
+            <!-- Bağlı istemciler -->
+            <DockPanel Grid.Column="0">
+                <TextBlock DockPanel.Dock="Top" Name="ClientsHeader" Text="Bağlı İstemciler (0)"
+                           FontWeight="SemiBold" Margin="0,0,0,6" />
+                <Border BorderBrush="#DDD" BorderThickness="1" CornerRadius="6">
+                    <ListBox Name="ClientsList" Background="Transparent">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="m:ClientRow">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding UserName}" FontWeight="SemiBold" />
+                                    <TextBlock Grid.Column="1" Text="{Binding MessageText}" Foreground="#555" />
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding EndPoint}"
+                                               Foreground="#777" FontSize="12" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ConnectedText}"
+                                               Foreground="#777" FontSize="12" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+            </DockPanel>
+
+            <!-- Sunucu günlüğü -->
+            <DockPanel Grid.Column="2">
+                <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="0,0,0,6">
+                    <TextBlock Text="Sunucu Günlüğü" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <Button Grid.Column="1" Content="Temizle" Padding="8,2" FontSize="12"
+                            Click="OnClearLogClick" />
+                </Grid>
+                <Border BorderBrush="#DDD" BorderThickness="1" CornerRadius="6">
+                    <ListBox Name="LogList" Background="Transparent" FontSize="12" />
+                </Border>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</Window>
